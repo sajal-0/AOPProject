@@ -3,9 +3,11 @@ package com.aop.aopProject.aop;
 import java.util.Date;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -47,6 +49,23 @@ public class EmployeeAspect {
 	public void afterThrowingAdviceForAddEmployeeService(JoinPoint joinPoint,Exception exception) {	
 		System.out.println("Bussiness logic to save an employee threws an exception "+ exception.getMessage());
 	}
+	
+	@Around(value = "execution(* com.aop.aopProject.service.AOPService.addEmployee(..))")
+	public Employee aroundAdviceForAddEmployeeService(ProceedingJoinPoint pjoinPoint) {	
+		System.out.println("Inside Around advide aspect : a bussiness logic to save employee started at : " + new Date());
+		try {
+			Employee emp = (Employee)pjoinPoint.proceed();
+			return emp;
+		} catch (Throwable e) {
+			e.printStackTrace();
+		} 
+		
+		System.out.println("Inside Around advide aspect : a bussiness logic to save employee Ended at : " + new Date());
+		return null;
+	}
+	
+	
+	
 	
 
 }
